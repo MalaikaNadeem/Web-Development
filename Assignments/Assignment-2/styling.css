@@ -1,0 +1,424 @@
+*{
+    font-family: "Steelfish",'oswald','arial narrow', sans-serif;
+}
+
+#InstagramHeader {
+    color: white;
+    background-color: black;
+    text-align: center;
+    margin-top: -10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: small;
+}
+
+.header-container{
+    display: flex;
+    width: 1250px;
+}
+
+#missguidedlogo{
+    margin-left: 550px;
+    margin-right: auto;
+    width: 180px;
+    height: 36px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+#currency{
+    margin-left: 330px;
+    width: 90px;
+    height: 30px;
+    border:0px;
+    outline:0px;
+    background-color: rgb(231, 227, 227);
+    border-color: rgb(231, 227, 227);
+    text-align: center;
+    font-size: 10px;
+}
+
+
+#searchicon, #profileicon, #shoppingcarticon{
+    margin-left: 7px;
+    padding: 3px;
+}
+
+#searchicon:hover{
+    background-color: rgb(231, 227, 227);
+}
+
+#profileicon:hover{
+    background-color: rgb(231, 227, 227);
+}
+
+#shoppingcarticon:hover{
+    background-color: rgb(231, 227, 227);
+}
+
+.sticky{
+    position: sticky;
+    top: 0;
+    background-color: white;
+    margin-left: -10px;
+    margin-right: -10px;
+    z-index: 2;
+    width: 100%;
+    width: 1266px;
+}
+
+li{
+    font-size: small;
+    list-style: none;
+    color: gray;
+    text-align: center;
+}
+
+.dropdownlinks{
+    color: grey;
+    text-decoration: none;
+}
+.dropdownlinks:hover{
+    color: black;
+    text-decoration:underline;
+}
+
+.menu-wrapper {
+    position: relative; 
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    width: 100%;
+    display: inline-block;
+}
+
+.menu-wrapper::-webkit-scrollbar {
+   display: none;
+}
+
+#menu {
+    display: inline-block; 
+    padding-left: 20px;
+    margin: 0;
+}
+
+#menu > li {
+    display: inline-block;
+    padding: 15px;
+    width: max-content;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.hasDropDown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown {
+    padding-top: 20px;
+    position: fixed;
+    left: 0%;
+    width: 1224px;
+    height: 250px;
+    background-color: white;
+    display: none;
+    text-align: center;
+}
+
+.hasDropDown:hover .dropdown {
+    display: grid;
+    grid-template-columns: repeat(5, 120px);
+    grid-template-rows: repeat(5, 5px);
+    gap: 40px;
+    grid-auto-flow: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.nav-arrow {
+    position: relative;
+    background: white;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    color: rgb(40, 39, 39);
+}
+
+.nav-arrow.left{
+    margin-left: 1220px;
+}
+
+.hasDropDown:hover{
+    color: black;
+    text-decoration: underline;
+}
+
+.nondropdown{
+    color: rgb(247, 83, 83);
+    font-weight: 600;
+}
+
+.nondropdown:hover{
+    color:red;
+}
+
+.slider-container{
+    overflow: hidden;
+    position: relative;
+    width: 1265px;
+    height: 670px;
+    margin-left: -10px;
+}
+
+.slider{
+    display: flex;
+    width: calc(1265px * 3);
+    animation: slide 10s infinite steps(1);
+}
+
+.slider img{
+    width: 1265px;
+    height: 670px;
+}
+
+@keyframes slide {
+    0% { transform: translateX(0); }       
+    33.33% { transform: translateX(-1265px); }
+    66.66%{ transform: translateX(-2530px); }
+    100% { transform: translateX(-3795px); }
+}
+
+
+.container{
+    display: flex;
+    width: 1255px;
+}
+
+.missguidedimgs{
+    height: 290px;
+    width: 167px;
+    margin-left: -10px;
+    margin-top: 10px;
+}
+
+.missguideddisplayimgs {
+    height: 427px;
+    width: 428.5px;
+    margin-left: -10px;
+    margin-top: 10px;
+}
+
+.products-container {
+    margin-top: 15px;
+    position: relative;
+    display: flex;
+    width: 1240px;
+    gap: 13px;
+    margin-right: -15px;
+}
+.products-wrapper{
+    position: relative;
+    height: 331px;
+    width: 240px;
+    margin-bottom: 95px;
+}
+
+.productimages{
+    height: 331px;
+    width: 243px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    transition: .5s ease;
+}
+
+.overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.products-wrapper:hover .overlay{
+    opacity: 1;
+}
+
+.addtocart{
+    position: absolute;
+    opacity:0;
+    bottom: 0;
+    left: 0;
+    width: 185px;
+    height: 20px;
+    margin: 10px;
+    background-color: rgb(247, 244, 244, 0.8);
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 7px;
+    padding-bottom: 3px;
+    color: black;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.products-wrapper:hover .addtocart{
+    opacity: 1;
+}
+
+.addtocart:hover{
+    background-color: white;
+}
+.productname{
+    color: black;
+    margin-top: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    font-weight: bold;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.sale-price{
+    display: block;
+    margin-top: 9px;
+    font-weight: bold;
+    font-size: 11px;
+    color: red;
+}
+
+.saleTag{
+    color: red;
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+    border-style:solid;
+    border-color: red;
+    padding-right: 7px;
+    padding-left: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-top: 3px;
+    margin-left: 3px;
+    display: inline-block;
+    border-width: 1px;
+    font-size: 9px;
+}
+
+.original-prices{
+    color: grey;
+    font-size: 9px;
+    text-decoration: line-through;
+    position: absolute;
+    padding-left: 3px;
+}
+
+#ViewMore{
+    display:inline;
+    margin-left: 598px;
+    font-weight: 790;
+    font-size: 10px;
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    background-color: white;
+}
+
+#ViewMore:hover{
+    background-color: black;
+    color: white;
+    text-decoration: none;
+}
+
+.footer{
+    margin-top: 19px;
+    padding: 20px;
+    display: grid;
+    background-color: rgb(1, 12, 31);
+    color: white;
+    font-weight: 790;
+    justify-content:left;
+    width: 1225px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: -10px;
+}
+
+.footer-container{
+    display:flex;
+    gap: 400px;
+}
+
+
+.subscription-notice{
+    color: white;
+    font-size: 9px;
+}
+
+.Customer-services, .privacy-terms{
+    color: white;
+    font-size: 12px;
+    text-align: left;
+    padding-bottom: 7px;
+    text-decoration: none;
+}
+
+#Customer-service-heading, #Privacy-Terms-Heading{
+    display: inline-flex;
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+#Subscription{
+    background-color:rgb(1, 12, 31);
+    width: 250px;
+    height: 17px;
+    border-style: solid;
+    border-color:  rgb(231, 227, 227);
+}
+
+#subscribe-button{
+    margin-left: -5px;
+    background-color:  rgb(231, 227, 227);
+    border-style: solid;
+    height: 23px;
+    border-color:  rgb(231, 227, 227);
+}
+
+#instagramLogo{
+    margin-left: 760px;
+}
+
+#TiktokLogo{
+    margin-left: 10px;
+}
+
+.cardbox{
+    display: flex;
+    justify-content: center;
+    height: 20px;
+    gap: 5px;
+    padding: 10px;
+}
+#rights{
+    font-size: 8px;
+    text-align: center;
+}
