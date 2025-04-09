@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://www.missguided.com/favicon.ico">
+    <title>Shop the latest trends at Missguided. Style for the extraordinary</title>
+    <link href="checkoutPageStyling.css" rel="stylesheet" >
+    <script src="checkoutPage.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <div class="logo"><img src="Images/missguidedlogo.png" alt=""></div>
+        <div class="checkout-title">SECURE CHECKOUT</div>
+        <a href="#" class="back-button"><img src="Images/checkoutback.svg" alt=""> Back</a>
+    </div>
+
+    <div class="container">
+        <form class="checkout-form" id="checkoutForm" novalidate>
+            <div class="form-section">
+                <div class="section-title">Contact and Shipping Information</div>
+                <div class="has-account">Have an account? <a href="#">Log in</a></div>
+                
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    <span class="error-message" id="email-error">Please enter a valid email address</span>
+                </div>
+
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required pattern="^[A-Za-z ]+$" minlength="2" maxlength="50">
+                        <span class="error-message" id="firstName-error">Please enter a valid first name (letters only)</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required pattern="^[A-Za-z ]+$" minlength="2" maxlength="50">
+                        <span class="error-message" id="lastName-error">Please enter a valid last name (letters only)</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required pattern="[0-9]+" minlength="10" maxlength="15">
+                    <span class="error-message" id="phone-error">Please enter a valid phone number (10-15 digits only)</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <input type="text" id="address" name="address" required minlength="5">
+                    <span class="error-message" id="address-error">Please enter your complete address</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" name="city" required pattern="^[A-Za-z ]+$">
+                        <span class="error-message" id="city-error">Please enter a valid city name</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State/Province *</label>
+                        <select id="state" name="state" required>
+                            <option value="">Select a state</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="DE">Delaware</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="SC">South Carolina</option>
+                        </select>
+                        <span class="error-message" id="state-error">Please select your state</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="zipCode">Post/ZIP Code *</label>
+                        <input type="text" id="zipCode" name="zipCode" required>
+                        <span class="error-message" id="zipCode-error">Please enter a valid postal code</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country *</label>
+                        <select id="country" name="country" required>
+                            <option value="" >Select a country</option>
+                            <option value="US" >United States</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="CA">Canada</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="ES">Spain</option>
+                            <option value="JP">Japan</option>
+                            <option value="BR">Brazil</option>
+                            <option value="MX">Mexico</option>
+                            <option value="ZA">South Africa</option>
+                            <option value="NG">Nigeria</option>
+                            <option value="CN">China</option>
+                            <option value="RU">Russia</option>
+                            <option value="SG">Singapore</option>
+                            <option value="KR">South Korea</option>
+                            <option value="SE">Sweden</option>
+                            <option value="NO">Norway</option>
+                        </select>
+                        <span class="error-message" id="country-error">Please select a country</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section shipping-method">
+                <div class="section-title">Shipping Method</div>
+                <div class="method-option">
+                    <input type="radio" id="standardShipping" name="shippingMethod" checked>
+                    <div class="method-details">
+                        <label for="standardShipping">Standard Shipping</label>
+                        <div class="method-description">Arrives between Tuesday, Apr 15 - Tuesday, Apr 22</div>
+                    </div>
+                    <div>$3.99</div>
+                </div>
+                <div class="method-option">
+                    <input type="radio" id="expressShipping" name="shippingMethod">
+                    <div class="method-details">
+                        <label for="expressShipping">Express Shipping</label>
+                        <div class="method-description">Arrives between Friday, Apr 11 - Friday, Apr 18</div>
+                    </div>
+                    <div>$12.90</div>
+                </div>
+            </div>
+
+            <div class="form-section payment-method">
+                <div class="section-title">Payment Method</div>
+                <div class="secure-tag">Secure Payment</div>
+                
+                <div class="method-option">
+                    <input type="radio" id="paypal" name="paymentMethod">
+                    <div class="method-details">
+                        <label for="paypal">PayPal Express Checkout</label>
+                        <div class="method-description">If you don't have a paypal account, you can also pay via paypal with your credit card or bank debit card. Payment can be submitted in any currency!</div>
+                    </div>
+                    <img src="Images/card1.svg" alt="PayPal" class="payment-icon">
+                </div>
+                
+                <div class="method-option">
+                    <input type="radio" id="creditCard" name="paymentMethod" checked>
+                    <div class="method-details">
+                        <label for="creditCard">Credit Card</label>
+                    </div>
+                    <div class="payment-icons">
+                        <img src="Images/card3.svg" alt="Visa" class="payment-icon">
+                        <img src="Images/card4.svg" alt="Mastercard" class="payment-icon">
+                        <img src="Images/card5.svg" alt="Amex" class="payment-icon">
+                        <img src="Images/card5.svg" alt="Diners" class="payment-icon">
+                        <img src="Images/card6.svg" alt="Discover" class="payment-icon">
+                        <img src="Images/card7.svg" alt="JCB" class="payment-icon">
+                    </div>
+                </div>
+
+                <div id="creditCardFields" class="credit-card-fields">
+                    <div class="form-group">
+                        <label for="cardNumber">Credit Card Number *</label>
+                        <input type="text" id="cardNumber" name="cardNumber" required pattern="[0-9]{16}" maxlength="16">
+                        <span class="error-message" id="cardNumber-error">Please enter a valid 16-digit card number (numbers only)</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date (MM/YY) *</label>
+                            <input type="text" id="expiryDate" name="expiryDate" required placeholder="MM/YY" maxlength="5">
+                            <span class="error-message" id="expiryDate-error">Please enter a valid future expiry date</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV *</label>
+                            <input type="text" id="cvv" name="cvv" required pattern="[0-9]{3}" maxlength="3">
+                            <span class="error-message" id="cvv-error">Please enter a valid 3-digit CVV (numbers only)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="method-option">
+                    <input type="radio" id="klarna" name="paymentMethod">
+                    <div class="method-details">
+                        <img src="Images/card2.svg" alt="">
+                        <label for="klarna">4 interest-free payments</label>
+                        <div class="method-description">Klarna allows you to split your purchase into 4 payments which will be automatically charged to your debit or credit card every two weeks. No interest. It's that easy. Please note that you must be at least 18 years old to apply.</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="cart-sidebar">
+            <div class="cart-details">
+                <div class="cart-title">Cart Details</div>
+                <div class="cart-item">
+                    <img src="Images/missguidedimg19pt1.webp" alt="Product Image" class="item-image">
+                    <div class="item-details">
+                        <h3>GINGHAM PRINT LONG TIERED BALLOON SLEEVES SQUARE NECK LACE TRIM SHIRRED BUST DETAIL...</h3>
+                        <p>Blue and White / 2(XS)</p>
+                    </div>
+                </div>
+                <div class="coupon-box">
+                    <input type="text" class="coupon-input" placeholder="Coupon Code">
+                    <button class="apply-button">Apply</button>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <div class="summary-title">Order Summary</div>
+                <div class="summary-row">
+                    <div>Retail Price:</div>
+                    <div>$24.99</div>
+                </div>
+                <div class="summary-row">
+                    <div>Discount:</div>
+                    <div class="negative-price">-$5.00</div>
+                </div>
+                <div class="summary-row">
+                    <div>Item discount:</div>
+                    <div class="negative-price">-$5.00</div>
+                </div>
+                <div class="summary-row">
+                    <div>Shipping Fee:</div>
+                    <div>$3.99</div>
+                </div>
+                <div class="summary-row">
+                    <div>Tax:</div>
+                    <div>$0.00</div>
+                </div>
+                <div class="total-row">
+                    <div>Total:</div>
+                    <div>$23.98</div>
+                </div>
+                <button type="submit" form="checkoutForm" class="button">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
