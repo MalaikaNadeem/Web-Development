@@ -1,0 +1,248 @@
+<div class="container py-5 product-detail-container">
+  <!-- ALERTS -->
+  <div id="alertContainer" class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1055; width: 100%; max-width: 480px;"></div>
+
+  <div class="row align-items-start">
+    <div class="col-md-6">
+      <img src="/<%= product.image || 'https://via.placeholder.com/400x400/6c757d/ffffff?text=Product+Image' %>" 
+           onerror="this.src='https://via.placeholder.com/400x400/6c757d/ffffff?text=Product+Image'" 
+           alt="<%= product.name %>" 
+           class="img-fluid rounded shadow-sm product-image"
+           loading="lazy">
+    </div>
+
+    <div class="col-md-6 mt-4 mt-md-0">
+      <h1 class="product-title"><%= product.name %></h1>
+
+      <p class="product-description">
+        <%= product.description || 'No description available' %>
+      </p>
+
+      <div class="price-stock mb-4">
+        <div class="product-price">$<%= parseFloat(product.price || 0).toFixed(2) %></div>
+        <div class="product-stock <%= parseInt(product.quantity || 0) > 0 ? 'text-success' : 'text-danger' %>">
+          <% if (parseInt(product.quantity || 0) > 0) { %>
+            <%= product.quantity %> in stock
+          <% } else { %>
+            Out of stock
+          <% } %>
+        </div>
+      </div>
+
+      <div class="mb-4 d-flex align-items-center gap-2">
+        <label for="quantity" class="form-label mb-0">Quantity:</label>
+        <div class="input-group quantity-group">
+          <button class="btn btn-outline-dark" type="button" onclick="decreaseQuantity()" <% if (parseInt(product.quantity || 0) <= 0) { %>disabled<% } %>>
+            <i class="fas fa-minus"></i>
+          </button>
+          <input type="number" id="quantity" class="form-control text-center" value="1" min="1" max="<%= product.quantity || 0 %>" <% if (parseInt(product.quantity || 0) <= 0) { %>disabled<% } %>>
+          <button class="btn btn-outline-dark" type="button" onclick="increaseQuantity()" <% if (parseInt(product.quantity || 0) <= 0) { %>disabled<% } %>>
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-4 d-grid gap-2">
+        <button class="btn btn-dark btn-lg add-to-cart-btn"
+                data-product-id="<%= product._id %>"
+                data-product-name="<%= product.name %>"
+                <% if (parseInt(product.quantity || 0) <= 0) { %>disabled<% } %>>
+          <span class="btn-text">
+            <% if (parseInt(product.quantity || 0) <= 0) { %>
+              Out of Stock
+            <% } else { %>
+              Add to Cart
+            <% } %>
+          </span>
+        </button>
+        <a href="/products" class="btn btn-outline-dark">Back to Products</a>
+      </div>
+
+      <div class="mt-5">
+        <h5 class="mb-3 fw-bold">Product Features</h5>
+        <ul class="list-features">
+          <li>High Quality Materials</li>
+          <li>Fast Shipping Available</li>
+          <li>30-Day Return Policy</li>
+          <li>Customer Support</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSS -->
+<style>
+:root {
+  --accent: #111827;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --bg-light: #f9fafb;
+}
+
+body {
+  background-color: var(--bg-light);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.product-detail-container {
+  max-width: 1080px;
+}
+
+.product-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.75rem;
+}
+
+.product-description {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.product-price {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.product-stock {
+  font-size: 1rem;
+  margin-top: 0.4rem;
+}
+
+.product-image {
+  max-height: 480px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 0.75rem;
+}
+
+.quantity-group input {
+  max-width: 60px;
+}
+
+.btn-text {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.list-features {
+  list-style: none;
+  padding-left: 0;
+}
+
+.list-features li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+
+.list-features li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: green;
+  font-weight: bold;
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+</style>
+
+<!-- JS (jQuery Required) -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('.add-to-cart-btn').click(function(e) {
+    e.preventDefault();
+
+    const productId = $(this).data('product-id');
+    const productName = $(this).data('product-name');
+    const quantity = parseInt($('#quantity').val()) || 1;
+
+    if (!productId) {
+      showAlert('danger', 'Product ID is missing');
+      return;
+    }
+
+    const button = $(this);
+    const originalText = button.find('.btn-text').text();
+    button.prop('disabled', true);
+    button.find('.btn-text').text('Adding...');
+
+    $.ajax({
+      url: '/cart/add',
+      method: 'POST',
+      data: { productId, quantity },
+      success: function(response) {
+        if (response && response.success) {
+          showAlert('success', response.message || 'Product added to cart!');
+          updateCartCount(response.cartCount || response.itemCount);
+        } else {
+          showAlert('danger', response.message || 'Error adding to cart');
+        }
+      },
+      error: function(xhr, status, error) {
+        let errorMessage = 'Error adding product to cart';
+        if (xhr.status === 404) errorMessage = 'Cart endpoint not found.';
+        else if (xhr.status === 500) errorMessage = 'Server error occurred.';
+        else if (status === 'timeout') errorMessage = 'Request timed out.';
+        else if (xhr.responseJSON?.message) errorMessage = xhr.responseJSON.message;
+
+        showAlert('danger', errorMessage);
+      },
+      complete: function() {
+        button.prop('disabled', false);
+        button.find('.btn-text').text(originalText);
+      }
+    });
+  });
+});
+
+function increaseQuantity() {
+  const input = document.getElementById('quantity');
+  const val = parseInt(input.value);
+  const max = parseInt(input.max);
+  if (val < max) input.value = val + 1;
+}
+
+function decreaseQuantity() {
+  const input = document.getElementById('quantity');
+  const val = parseInt(input.value);
+  if (val > 1) input.value = val - 1;
+}
+
+function showAlert(type, message) {
+  const icon = type === 'success' ? 'check-circle' : 'exclamation-triangle';
+  const alert = `
+    <div class="alert alert-${type} alert-dismissible fade show shadow-sm" role="alert">
+      <i class="fas fa-${icon} me-2"></i>${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  `;
+  $('#alertContainer').append(alert);
+  setTimeout(() => {
+    $('#alertContainer .alert').first().fadeOut(() => $(this).remove());
+  }, 5000);
+}
+
+function updateCartCount(count) {
+  const el = document.querySelector('.cart-count, #cart-count, [data-cart-count]');
+  if (el) el.textContent = count;
+
+  const badge = document.querySelector('.cart-badge, [data-cart-badge]');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'inline' : 'none';
+  }
+}
+</script>

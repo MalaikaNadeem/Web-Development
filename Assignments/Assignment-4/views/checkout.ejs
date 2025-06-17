@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://www.missguided.com/favicon.ico">
+    <title>Shop the latest trends at Missguided. Style for the extraordinary</title>
+    <link href="/css/checkoutPageStyling.css" rel="stylesheet">
+    <style>
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Processing your order...</p>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="logo"><img src="/Images/missguidedlogo.png" alt="Missguided Logo"></div>
+        <div class="checkout-title">SECURE CHECKOUT</div>
+        <a href="/cart" class="back-button"><img src="/Images/checkoutback.svg" alt=""> Back</a>
+    </div>
+
+    <div class="container">
+        <div id="alertContainer">
+            <% if (error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            <% if (message) { %>
+                <div class="alert alert-success"><%= message %></div>
+            <% } %>
+        </div>
+
+        <form class="checkout-form" id="checkoutForm" method="POST" action="/checkout" novalidate>
+            <div class="form-section">
+                <div class="section-title">Contact and Shipping Information</div>
+                <div class="has-account">Have an account? <a href="/auth/login">Log in</a></div>
+
+                <div class="form-group">
+                    <label for="title">Title *</label>
+                    <select id="title" name="title" required>
+                        <option value="">Select title</option>
+                        <option value="Mr" <%= (formData && formData.title === 'Mr') ? 'selected' : '' %>>Mr</option>
+                        <option value="Mrs" <%= (formData && formData.title === 'Mrs') ? 'selected' : '' %>>Mrs</option>
+                        <option value="Ms" <%= (formData && formData.title === 'Ms') ? 'selected' : '' %>>Ms</option>
+                        <option value="Miss" <%= (formData && formData.title === 'Miss') ? 'selected' : '' %>>Miss</option>
+                        <option value="Dr" <%= (formData && formData.title === 'Dr') ? 'selected' : '' %>>Dr</option>
+                    </select>
+                    <span class="error-message" id="title-error">Please select a title</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" value="<%= (formData && formData.email) ? formData.email : '' %>" required>
+                    <span class="error-message" id="email-error">Please enter a valid email address</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" value="<%= (formData && formData.firstName) ? formData.firstName : '' %>" required minlength="2" maxlength="50">
+                        <span class="error-message" id="firstName-error">Please enter a valid first name (at least 2 characters)</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" value="<%= (formData && formData.lastName) ? formData.lastName : '' %>" required minlength="2" maxlength="50">
+                        <span class="error-message" id="lastName-error">Please enter a valid last name (at least 2 characters)</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="countryCode">Country Code *</label>
+                    <select id="countryCode" name="countryCode" required>
+                        <option value="">Select country code</option>
+                        <option value="+1" <%= (formData && formData.countryCode === '+1') ? 'selected' : '' %>>+1 (US/Canada)</option>
+                        <option value="+44" <%= (formData && formData.countryCode === '+44') ? 'selected' : '' %>>+44 (UK)</option>
+                        <option value="+49" <%= (formData && formData.countryCode === '+49') ? 'selected' : '' %>>+49 (Germany)</option>
+                        <option value="+33" <%= (formData && formData.countryCode === '+33') ? 'selected' : '' %>>+33 (France)</option>
+                        <option value="+91" <%= (formData && formData.countryCode === '+91') ? 'selected' : '' %>>+91 (India)</option>
+                    </select>
+                    <span class="error-message" id="countryCode-error">Please select a country code</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" value="<%= (formData && formData.phone) ? formData.phone : '' %>" required minlength="10" maxlength="15">
+                    <span class="error-message" id="phone-error">Please enter a valid phone number (10-15 digits)</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <input type="text" id="address" name="address" value="<%= (formData && formData.address) ? formData.address : '' %>" required minlength="5">
+                    <span class="error-message" id="address-error">Please enter your complete address (at least 5 characters)</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="address2">Address 2 (Optional)</label>
+                    <input type="text" id="address2" name="address2" value="<%= (formData && formData.address2) ? formData.address2 : '' %>">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" name="city" value="<%= (formData && formData.city) ? formData.city : '' %>" required>
+                        <span class="error-message" id="city-error">Please enter a valid city name</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="postcode">Post/ZIP Code *</label>
+                        <input type="text" id="postcode" name="postcode" value="<%= (formData && formData.postcode) ? formData.postcode : '' %>" required>
+                        <span class="error-message" id="postcode-error">Please enter a valid postal code</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select a country</option>
+                        <option value="US" <%= (formData && formData.country === 'US') ? 'selected' : '' %>>United States</option>
+                        <option value="UK" <%= (formData && formData.country === 'UK') ? 'selected' : '' %>>United Kingdom</option>
+                        <option value="CA" <%= (formData && formData.country === 'CA') ? 'selected' : '' %>>Canada</option>
+                        <option value="DE" <%= (formData && formData.country === 'DE') ? 'selected' : '' %>>Germany</option>
+                        <option value="FR" <%= (formData && formData.country === 'FR') ? 'selected' : '' %>>France</option>
+                        <option value="IT" <%= (formData && formData.country === 'IT') ? 'selected' : '' %>>Italy</option>
+                        <option value="ES" <%= (formData && formData.country === 'ES') ? 'selected' : '' %>>Spain</option>
+                        <option value="JP" <%= (formData && formData.country === 'JP') ? 'selected' : '' %>>Japan</option>
+                        <option value="BR" <%= (formData && formData.country === 'BR') ? 'selected' : '' %>>Brazil</option>
+                        <option value="MX" <%= (formData && formData.country === 'MX') ? 'selected' : '' %>>Mexico</option>
+                        <option value="ZA" <%= (formData && formData.country === 'ZA') ? 'selected' : '' %>>South Africa</option>
+                        <option value="NG" <%= (formData && formData.country === 'NG') ? 'selected' : '' %>>Nigeria</option>
+                        <option value="CN" <%= (formData && formData.country === 'CN') ? 'selected' : '' %>>China</option>
+                        <option value="RU" <%= (formData && formData.country === 'RU') ? 'selected' : '' %>>Russia</option>
+                        <option value="SG" <%= (formData && formData.country === 'SG') ? 'selected' : '' %>>Singapore</option>
+                        <option value="KR" <%= (formData && formData.country === 'KR') ? 'selected' : '' %>>South Korea</option>
+                        <option value="SE" <%= (formData && formData.country === 'SE') ? 'selected' : '' %>>Sweden</option>
+                        <option value="NO" <%= (formData && formData.country === 'NO') ? 'selected' : '' %>>Norway</option>
+                    </select>
+                    <span class="error-message" id="country-error">Please select a country</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Special Instructions (Optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any special delivery instructions..."><%= (formData && formData.notes) ? formData.notes : '' %></textarea>
+                </div>
+            </div>
+
+            <div class="form-section shipping-method">
+                <div class="section-title">Shipping Method</div>
+                <div class="method-option">
+                    <input type="radio" id="standardShipping" name="shippingMethod" value="standardShipping" checked>
+                    <div class="method-details">
+                        <label for="standardShipping">Standard Shipping</label>
+                        <div class="method-description">Arrives between Tuesday, Apr 15 - Tuesday, Apr 22</div>
+                    </div>
+                    <div>$3.99</div>
+                </div>
+                <div class="method-option">
+                    <input type="radio" id="expressShipping" name="shippingMethod" value="expressShipping">
+                    <div class="method-details">
+                        <label for="expressShipping">Express Shipping</label>
+                        <div class="method-description">Arrives between Friday, Apr 11 - Friday, Apr 18</div>
+                    </div>
+                    <div>$12.90</div>
+                </div>
+            </div>
+
+            <div class="form-section payment-method">
+                <div class="section-title">Payment Method</div>
+                <div class="secure-tag">Secure Payment</div>
+                
+                <div class="method-option">
+                    <input type="radio" id="paypal" name="paymentMethod" value="paypal">
+                    <div class="method-details">
+                        <label for="paypal">PayPal Express Checkout</label>
+                        <div class="method-description">If you don't have a paypal account, you can also pay via paypal with your credit card or bank debit card. Payment can be submitted in any currency!</div>
+                    </div>
+                    <img src="Images/card1.svg" alt="PayPal" class="payment-icon">
+                </div>
+                
+                <div class="method-option">
+                    <input type="radio" id="creditCard" name="paymentMethod" value="card">
+                    <div class="method-details">
+                        <label for="creditCard">Credit Card</label>
+                    </div>
+                    <div class="payment-icons">
+                        <img src="/Images/card3.svg" alt="Visa" class="payment-icon">
+                        <img src="/Images/card4.svg" alt="Mastercard" class="payment-icon">
+                        <img src="/Images/card5.svg" alt="Amex" class="payment-icon">
+                        <img src="/Images/card5.svg" alt="Diners" class="payment-icon">
+                        <img src="/Images/card6.svg" alt="Discover" class="payment-icon">
+                        <img src="/Images/card7.svg" alt="JCB" class="payment-icon">
+                    </div>
+                </div>
+
+                <div id="creditCardFields" class="credit-card-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="cardNumber">Credit Card Number *</label>
+                        <input type="text" id="cardNumber" name="cardNumber" pattern="[0-9]{16}" maxlength="16">
+                        <span class="error-message" id="cardNumber-error">Please enter a valid 16-digit card number (numbers only)</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date (MM/YY) *</label>
+                            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            <span class="error-message" id="expiryDate-error">Please enter a valid future expiry date</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV *</label>
+                            <input type="text" id="cvv" name="cvv" pattern="[0-9]{3}" maxlength="3">
+                            <span class="error-message" id="cvv-error">Please enter a valid 3-digit CVV (numbers only)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="method-option">
+                    <input type="radio" id="klarna" name="paymentMethod" value="klarna">
+                    <div class="method-details">
+                        <img src="/Images/card2.svg" alt="">
+                        <label for="klarna">4 interest-free payments</label>
+                        <div class="method-description">Klarna allows you to split your purchase into 4 payments which will be automatically charged to your debit or credit card every two weeks. No interest. It's that easy. Please note that you must be at least 18 years old to apply.</div>
+                    </div>
+                </div>
+
+                <div class="method-option">
+                    <input type="radio" id="cash" name="paymentMethod" value="cash" checked>
+                    <div class="method-details">
+                        <label for="cash">Pay Later with Cash</label>
+                        <div class="method-description">Pay when your order arrives. Cash on delivery option available.</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="cart-sidebar">
+            <div class="cart-details">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <% if (cart && cart.items && cart.items.length > 0) { %>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal (<%= cart.itemCount %> items):</span>
+                                <strong>$<%= cart.total %></strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping:</span>
+                                <span class="text-success">Free</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax:</span>
+                                <span>$0.00</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <h5 class="mb-0">Total:</h5>
+                                <h5 class="mb-0 text-primary">$<%= cart.total %></h5>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" form="checkoutForm" class="btn btn-success btn-lg mb-2" id="placeOrderBtn">
+                                    Place Order
+                                </button>
+                                <small class="text-muted text-center">
+                                    <i class="fas fa-lock"></i> Secure checkout with SSL encryption
+                                </small>
+                            </div>
+                        <% } else { %>
+                            <div class="text-center">
+                                <p>Your cart is empty</p>
+                                <a href="/products" class="btn btn-primary">Continue Shopping</a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+            const creditCardFields = document.getElementById('creditCardFields');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        creditCardFields.style.display = 'block';
+                        document.getElementById('cardNumber').required = true;
+                        document.getElementById('expiryDate').required = true;
+                        document.getElementById('cvv').required = true;
+                    } else {
+                        creditCardFields.style.display = 'none';
+                        document.getElementById('cardNumber').required = false;
+                        document.getElementById('expiryDate').required = false;
+                        document.getElementById('cvv').required = false;
+                    }
+                });
+            });
+
+            const form = document.getElementById('checkoutForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            form.addEventListener('submit', function(e) {
+                loadingOverlay.style.display = 'flex';
+                
+
+            });
+        });
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePhone(phone) {
+            const re = /^[0-9]{10,15}$/;
+            return re.test(phone);
+        }
+
+        function validateName(name) {
+            const re = /^[A-Za-z\s]+$/;
+            return re.test(name) && name.length >= 2;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+
+            emailInput.addEventListener('blur', function() {
+                const errorDiv = document.getElementById('email-error');
+                if (this.value && !validateEmail(this.value)) {
+                    this.classList.add('error');
+                    errorDiv.classList.add('show');
+                } else {
+                    this.classList.remove('error');
+                    errorDiv.classList.remove('show');
+                }
+            });
+
+            phoneInput.addEventListener('blur', function() {
+                const errorDiv = document.getElementById('phone-error');
+                if (this.value && !validatePhone(this.value)) {
+                    this.classList.add('error');
+                    errorDiv.classList.add('show');
+                } else {
+                    this.classList.remove('error');
+                    errorDiv.classList.remove('show');
+                }
+            });
+
+            firstNameInput.addEventListener('blur', function() {
+                const errorDiv = document.getElementById('firstName-error');
+                if (this.value && !validateName(this.value)) {
+                    this.classList.add('error');
+                    errorDiv.classList.add('show');
+                } else {
+                    this.classList.remove('error');
+                    errorDiv.classList.remove('show');
+                }
+            });
+
+            lastNameInput.addEventListener('blur', function() {
+                const errorDiv = document.getElementById('lastName-error');
+                if (this.value && !validateName(this.value)) {
+                    this.classList.add('error');
+                    errorDiv.classList.add('show');
+                } else {
+                    this.classList.remove('error');
+                    errorDiv.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

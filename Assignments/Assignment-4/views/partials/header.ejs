@@ -1,0 +1,53 @@
+<div class="sticky">
+    <div class="container-fluid p-0">
+        <a href="" id="InstagramLink">
+            <h4 class='mt-n2' id="InstagramHeader">FOLLOW US ON INSTAGRAM @MISSGUIDED</h4>
+        </a>
+    </div>
+
+    <div class="header-container">
+        <div class="p-2 flex-grow-1 d-flex justify-content-center">
+            <a href="/"><img id="missguidedlogo" src="/Images/missguidedlogo.png" alt="missguided"></a>
+        </div>
+
+        <div class="p-2">
+            <select class="form-select" aria-label="Currency selection" id="currency">
+                <option value="USD">USD / $</option>
+                <option value="EUR">EUR / €</option>
+                <option value="GBP">GBP / £</option>
+                <option value="SAR">SAR / SAR</option>
+            </select>
+        </div>
+
+        <div class="p-2">
+            <a href="/products"><img id="searchicon" src="/Images/searchicon.svg" alt="Search"></a>
+        </div>
+        
+        <div class="p-2">
+            <% if (locals.user) { %>
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <img id="profileicon" src="/Images/profileicon.svg" alt="Profile">
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="POST" action="/logout" class="m-0">
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            <% } else { %>
+                <a href="/auth/login"><img id="profileicon" src="/Images/profileicon.svg" alt="Login"></a>
+            <% } %>
+        </div>
+        
+        <div class="p-2 me-4">
+            <a href="/cart"><img id="shoppingcarticon" src="/Images/shoppingcarticon.svg" alt="Cart"></a>
+        </div>
+    </div>
+
+    <%- include('navigation') %>
+</div>

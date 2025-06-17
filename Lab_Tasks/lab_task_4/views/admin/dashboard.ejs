@@ -1,0 +1,166 @@
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card admin-card stats-card products">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0"><%= stats.totalProducts %></h4>
+                        <p class="mb-0">Total Products</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-box fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card admin-card stats-card orders">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0"><%= stats.totalOrders %></h4>
+                        <p class="mb-0">Total Orders</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card admin-card stats-card pending">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0"><%= stats.pendingOrders %></h4>
+                        <p class="mb-0">Pending Orders</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card admin-card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0"><%= stats.deliveredOrders %></h4>
+                        <p class="mb-0">Delivered Orders</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card admin-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>
+                    Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/products/add" class="btn btn-admin-primary w-100">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Add New Product
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/products" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-box me-2"></i>
+                            Manage Products
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/orders" class="btn btn-outline-success w-100">
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            View All Orders
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/" target="_blank" class="btn btn-outline-info w-100">
+                            <i class="fas fa-external-link-alt me-2"></i>
+                            View Store
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card admin-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    System Overview
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-muted mb-3">Order Status Distribution</h6>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Pending Orders</span>
+                                <span class="badge status-pending"><%= stats.pendingOrders %></span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Delivered Orders</span>
+                                <span class="badge status-delivered"><%= stats.deliveredOrders %></span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Total Orders</span>
+                                <span class="badge bg-primary"><%= stats.totalOrders %></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h6 class="text-muted mb-3">System Information</h6>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Admin Panel Version</span>
+                                <span class="badge bg-info">v1.0.0</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Database Status</span>
+                                <span class="badge bg-success">Connected</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Last Updated</span>
+                                <span class="text-muted"><%= new Date().toLocaleDateString() %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

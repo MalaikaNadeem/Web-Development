@@ -1,0 +1,28 @@
+<div class="auth-form-container">
+    <h2 class="auth-title">Login to Your Account</h2>
+    
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/login" class="auth-form">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100 auth-btn">Login</button>
+    </form>
+    
+    <div class="auth-links">
+        <p>Don't have an account? <a href="/register">Sign up here</a></p>
+        <p><a href="/">← Back to Shopping</a></p>
+    </div>
+</div>

@@ -1,0 +1,304 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    max-width: 220px;
+    height: 44px;
+}
+
+.logo img {
+    max-width: 100%; 
+    height: auto;
+}
+
+.checkout-title {
+    font-size: 16px;
+    color: #333;
+}
+
+.back-button {
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1.25rem;
+    gap: 1.25rem;
+}
+
+.checkout-form {
+    flex: 60%;
+    background-color: white;
+    padding: 30px;
+    border-radius: 0.25rem;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 18px;
+    margin-bottom: 1.25rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    color: #333;
+}
+
+input, select {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #666;
+}
+
+.error-message {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+input.error, select.error {
+    border-color: #f44336;
+}
+
+.has-account {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.25rem;
+}
+
+.has-account a {
+    color: #575555;
+    text-decoration: none;
+}
+
+.button {
+    background-color: #111;
+    color: white;
+    border: none;
+    padding: 1rem;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #333;
+}
+
+.cart-sidebar {
+    flex: 40%;
+    position: sticky;
+    top: 90px;
+    align-self: flex-start;
+}
+
+.cart-details {
+    background-color: white;
+    padding: 1.25rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.cart-title {
+    font-size: 18px;
+    margin-bottom: 1.25rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.cart-item {
+    display: flex;
+    margin-bottom: 1.25rem;
+}
+
+.item-image {
+    width: 5rem;
+    height: 6.25rem;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.item-details h3 {
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.item-details p {
+    font-size: 14px;
+    color: #666;
+}
+
+.coupon-box {
+    display: flex;
+    margin-bottom: 1.75rem;
+}
+
+.coupon-input {
+    flex: 1;
+}
+
+.apply-button {
+    background-color: #111;
+    color: white;
+    border: none;
+    padding: 0 1.25rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.order-summary {
+    background-color: white;
+    padding: 1.25rem;
+    border-radius: 0.25rem;
+}
+
+.summary-title {
+    font-size: 18px;
+    margin-bottom: 1.25rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 14px;
+}
+
+.negative-price {
+    color: #f44336;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 1.25rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.shipping-method, .payment-method {
+    margin-bottom: 2rem;
+}
+
+.method-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.method-option input[type="radio"] {
+    width: auto;
+    margin-right: 0.75rem;
+}
+
+.method-details {
+    flex: 1;
+}
+
+.method-description {
+    font-size: 12px;
+    color: #666;
+}
+
+.payment-icons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.payment-icon {
+    width: 1.75rem;
+    height: 1.25rem;
+    object-fit: contain;
+}
+
+.privacy-link {
+    display: block;
+    text-align: right;
+    margin: 0.75rem 0;
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.secure-tag {
+    color: #4caf50;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.secure-tag::before {
+    content: "✓";
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+@media (max-width: 100%) {
+    .container {
+        flex-direction: column;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
