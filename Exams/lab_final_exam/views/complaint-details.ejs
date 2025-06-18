@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - eCommerce</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .complaint-detail-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+        .status-pending { background-color: #ffc107; color: #000; }
+        .status-in-progress { background-color: #17a2b8; color: #fff; }
+        .status-resolved { background-color: #28a745; color: #fff; }
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: #007bff;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px #dee2e6;
+        }
+        .order-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        .back-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <%- include('partials/navbar') %>
+
+    <div class="container my-5">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a href="/contact-us" class="btn btn-primary back-btn">
+                <i class="fas fa-arrow-left me-2"></i>
+                Back to Contact Us
+            </a>
+        </div>
+
+        <div class="row">
+            <!-- Complaint Details -->
+            <div class="col-lg-8 mb-4">
+                <div class="card complaint-detail-card">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">
+                                <i class="fas fa-comment-alt me-2"></i>
+                                Complaint Details
+                            </h4>
+                            <span class="badge status-<%= complaint.status %> status-badge">
+                                <%= complaint.status.replace('-', ' ').toUpperCase() %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Complaint Information -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Complaint ID</h6>
+                                <p class="fw-bold">#<%= complaint._id.toString().slice(-8).toUpperCase() %></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Submitted On</h6>
+                                <p><%= new Date(complaint.createdAt).toLocaleDateString('en-US', { 
+                                    weekday: 'long', 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) %></p>
+                            </div>
+                        </div>
+
+                        <!-- Order Information -->
+                        <div class="order-info mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-shopping-bag me-2"></i>
+                                Related Order
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6 class="text-muted">Order Number</h6>
+                                    <p class="fw-bold">#<%= complaint.orderId.orderNumber || complaint.orderId._id.toString().slice(-6) %></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted">Order Total</h6>
+                                    <p class="fw-bold text-success">$<%= complaint.orderId.total.toFixed(2) %></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted">Order Date</h6>
+                                    <p><%= new Date(complaint.orderId.createdAt).toLocaleDateString() %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Complaint Message -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-message me-2"></i>
+                                Your Message
+                            </h5>
+                            <div class="alert alert-light border p-3">
+                                <p class="mb-0" style="white-space: pre-wrap;"><%= complaint.message %></p>
+                            </div>
+                        </div>
+
+                        <!-- Admin Response -->
+                        <% if (complaint.adminResponse) { %>
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">
+                                    <i class="fas fa-reply me-2"></i>
+                                    Admin Response
+                                </h5>
+                                <div class="alert alert-success border p-3">
+                                    <p class="mb-0" style="white-space: pre-wrap;"><%= complaint.adminResponse %></p>
+                                    <hr>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        Responded on <%= new Date(complaint.updatedAt).toLocaleDateString('en-US', { 
+                                            weekday: 'long', 
+                                            year: 'numeric', 
+                                            month: 'long', 
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        }) %>
+                                    </small>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                We are reviewing your complaint and will respond soon. Thank you for your patience.
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline and Status -->
+            <div class="col-lg-4">
+                <div class="card complaint-detail-card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history me-2"></i>
+                            Status Timeline
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="fw-bold text-primary">Complaint Submitted</div>
+                                <small class="text-muted">
+                                    <%= new Date(complaint.createdAt).toLocaleDateString() %> at 
+                                    <%= new Date(complaint.createdAt).toLocaleTimeString() %>
+                                </small>
+                                <p class="mt-2 mb-0">Your complaint has been received and assigned a tracking ID.</p>
+                            </div>
+
+                            <% if (complaint.status === 'in-progress' || complaint.status === 'resolved') { %>
+                                <div class="timeline-item">
+                                    <div class="fw-bold text-info">Under Review</div>
+                                    <small class="text-muted">In Progress</small>
+                                    <p class="mt-2 mb-0">Our support team is reviewing your complaint.</p>
+                                </div>
+                            <% } %>
+
+                            <% if (complaint.status === 'resolved') { %>
+                                <div class="timeline-item">
+                                    <div class="fw-bold text-success">Resolved</div>
+                                    <small class="text-muted">
+                                        <%= new Date(complaint.updatedAt).toLocaleDateString() %> at 
+                                        <%= new Date(complaint.updatedAt).toLocaleTimeString() %>
+                                    </small>
+                                    <p class="mt-2 mb-0">Your complaint has been resolved. Thank you for your feedback.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="card complaint-detail-card mt-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-headset me-2"></i>
+                            Need More Help?
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">If you need additional assistance, please contact us:</p>
+                        
+                        <div class="mb-3">
+                            <i class="fas fa-envelope text-primary me-2"></i>
+                            <strong>Email:</strong> support@ecommerce.com
+                        </div>
+                        
+                        <div class="mb-3">
+                            <i class="fas fa-phone text-primary me-2"></i>
+                            <strong>Phone:</strong> +1 (555) 123-4567
+                        </div>
+                        
+                        <div class="mb-3">
+                            <i class="fas fa-clock text-primary me-2"></i>
+                            <strong>Hours:</strong><br>
+                            <small class="text-muted">
+                                Mon-Fri: 9AM-6PM<br>
+                                Sat: 10AM-4PM<br>
+                                Sun: Closed
+                            </small>
+                        </div>
+
+                        <hr>
+                        
+                        <div class="alert alert-warning alert-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <small>
+                                <strong>Reference ID:</strong> #<%= complaint._id.toString().slice(-8).toUpperCase() %>
+                                <br>Please mention this ID when contacting support.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

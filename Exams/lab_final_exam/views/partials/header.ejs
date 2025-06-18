@@ -1,0 +1,87 @@
+<div class="sticky">
+    <div class="container-fluid p-0">
+        <a href="" id="InstagramLink">
+            <h4 class='mt-n2' id="InstagramHeader">FOLLOW US ON INSTAGRAM @MISSGUIDED</h4>
+        </a>
+    </div>
+
+    <div class="header-container">
+        <div class="p-2 flex-grow-1 d-flex justify-content-center">
+            <a href="/"><img id="missguidedlogo" src="/Images/missguidedlogo.png" alt="missguided"></a>
+        </div>
+
+        <div class="p-2">
+            <select class="form-select" aria-label="Currency selection" id="currency">
+                <option value="">Select a state</option>
+                <option value="AL">Alabama</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="SC">South Carolina</option>
+            </select>
+        </div>
+
+        <div class="p-2" id="searchicon">
+            <form id="logout-form" action="/auth/logout" method="POST" style="display: inline;">
+                <button type="submit" style="border: none; background: none; padding: 0;" onclick="return confirm('Are you sure you want to logout?')">
+                    <img src="/Images/logout.svg" alt="Logout" style="cursor: pointer;">
+                </button>
+            </form>
+        </div>
+
+        <div class="p-2">
+            <a href="/admin"><img id="searchicon" src="/Images/iconadmin.svg" alt="Search"></a>
+        </div>
+        <div class="p-2">
+            <a href="/contact-us"><img id="searchicon" src="/Images/contact-us-icon.svg" alt="Search"></a>
+        </div>
+        <div class="p-2">
+            <a href="/orders/my-orders"><img id="searchicon" src="/Images/myOrders.svg" alt="Search"></a>
+        </div>
+        <div class="p-2">
+            <a href="/products"><img id="searchicon" src="/Images/searchicon.svg" alt="Search"></a>
+        </div>
+        
+        <div class="p-2">
+            <% if (locals.user) { %>
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <img id="profileicon" src="/Images/profileicon.svg" alt="Profile">
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="POST" action="/logout" class="m-0">
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            <% } else { %>
+                <a href="/auth/login"><img id="profileicon" src="/Images/profileicon.svg" alt="Login"></a>
+            <% } %>
+        </div>
+        
+        <div class="p-2 me-4">
+            <a href="/cart"><img id="shoppingcarticon" src="/Images/shoppingcarticon.svg" alt="Cart"></a>
+        </div>
+        
+    </div>
+
+    <%- include('navigation') %>
+</div>

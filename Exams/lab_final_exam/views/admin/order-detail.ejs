@@ -1,0 +1,256 @@
+<% if (order) { %>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-1">Order #<%= order.orderNumber || order._id.toString().slice(-6) %></h3>
+            <p class="text-muted mb-0">
+                Placed on <%= new Date(order.orderDate || order.createdAt).toLocaleDateString() %> 
+                at <%= new Date(order.orderDate || order.createdAt).toLocaleTimeString() %>
+            </p>
+        </div>
+        <div>
+            <a href="/admin/orders" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Orders
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card admin-card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Order Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h6>Current Status:</h6>
+                            <span class="badge badge-status status-<%= order.status || 'pending' %> fs-6">
+                                <%= (order.status || 'pending').charAt(0).toUpperCase() + (order.status || 'pending').slice(1) %>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Update Status:</h6>
+                            <div class="dropdown">
+                                <button class="btn btn-admin-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Change Status
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <form method="POST" action="/admin/orders/<%= order._id %>/status" class="d-inline">
+                                            <input type="hidden" name="status" value="pending">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-clock me-2"></i>Pending
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="/admin/orders/<%= order._id %>/status" class="d-inline">
+                                            <input type="hidden" name="status" value="confirmed">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-check me-2"></i>Confirmed
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="/admin/orders/<%= order._id %>/status" class="d-inline">
+                                            <input type="hidden" name="status" value="processing">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-cog me-2"></i>Processing
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="/admin/orders/<%= order._id %>/status" class="d-inline">
+                                            <input type="hidden" name="status" value="shipped">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-shipping-fast me-2"></i>Shipped
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="/admin/orders/<%= order._id %>/status" class="d-inline">
+                                            <input type="hidden" name="status" value="delivered">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-check-circle me-2"></i>Delivered
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="POST" action="/admin/orders/<%= order._id %>/status" class="d-inline">
+                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="fas fa-times me-2"></i>Cancel Order
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <% if (order.deliveryDate) { %>
+                        <div class="mt-3">
+                            <h6>Delivery Date:</h6>
+                            <p class="text-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Delivered on <%= new Date(order.deliveryDate).toLocaleDateString() %>
+                            </p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card admin-card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-box me-2"></i>
+                        Order Items
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <% if (order.items && order.items.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% order.items.forEach(item => { %>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <% if (item.image) { %>
+                                                        <img src="<%= item.image %>" alt="<%= item.productName %>" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                                    <% } else { %>
+                                                        <div class="bg-light me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 5px;">
+                                                            <i class="fas fa-image text-muted"></i>
+                                                        </div>
+                                                    <% } %>
+                                                    <div>
+                                                        <h6 class="mb-0"><%= item.name || 'Unknown Product' %></h6>
+                                                        <% if (item.description) { %>
+                                                            <small class="text-muted"><%= item.description %></small>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>$<%= item.price || '0.00' %></td>
+                                            <td><%= item.quantity || 1 %></td>
+                                            <td><strong>$<%= ((parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1)).toFixed(2) %></strong></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-4">
+                            <i class="fas fa-box-open fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">No items found for this order</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card admin-card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        Customer Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Name:</h6>
+                        <p class="mb-0"><%= order.customerName || 'N/A' %></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Email:</h6>
+                        <p class="mb-0">
+                            <% if (order.customerEmail) { %>
+                                <a href="mailto:<%= order.customerEmail %>"><%= order.customerEmail %></a>
+                            <% } else { %>
+                                N/A
+                            <% } %>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Phone:</h6>
+                        <p class="mb-0"><%= order.customerPhone || 'N/A' %></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card admin-card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shipping-fast me-2"></i>
+                        Shipping Address
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <% if (order.shippingAddress) { %>
+                        <p class="mb-0">
+                            <%= order.shippingAddress.street || '' %><br>
+                            <%= order.shippingAddress.city || '' %>, <%= order.shippingAddress.state || '' %> <%= order.shippingAddress.zipCode || '' %><br>
+                            <%= order.shippingAddress.country || '' %>
+                        </p>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No shipping address provided</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card admin-card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calculator me-2"></i>
+                        Order Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>$<%= order.subtotal || '0.00' %></span>
+                    </div>
+                    <% if (order.tax) { %>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax:</span>
+                            <span>$<%= order.tax %></span>
+                        </div>
+                    <% } %>
+                    <% if (order.shipping) { %>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping:</span>
+                            <span>$<%= order.shipping %></span>
+                        </div>
+                    <% } %>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total:</strong>
+                        <strong>$<%= order.totalAmount || '0.00' %></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } else { %>
+    <div class="text-center py-5">
+        <i class="fas fa-exclamation-triangle fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">Order Not Found</h4>
+        <p class="text-muted">The order you're looking for doesn't exist or has been removed.</p>
+        <a href="/admin/orders" class="btn btn-admin-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Orders
+        </a>
+    </div>
+<% } %>

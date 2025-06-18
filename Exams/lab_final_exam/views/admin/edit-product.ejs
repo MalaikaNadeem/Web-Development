@@ -1,0 +1,255 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="mb-0">Edit Product</h3>
+        <p class="text-muted mb-0">Update product information</p>
+    </div>
+    <div>
+        <a href="/admin/products" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Back to Products
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card admin-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-edit me-2"></i>
+                    Product Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/admin/products/<%= product._id %>/edit">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">
+                                Product Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="<%= product.name %>" required>
+                            <div class="form-text">Enter a clear, descriptive product name</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="category" name="category" 
+                                   value="<%= product.category || '' %>" 
+                                   placeholder="e.g., Electronics, Clothing, Books">
+                            <div class="form-text">Optional: Product category for organization</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="price" class="form-label">
+                                Price ($) <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="price" name="price" 
+                                       value="<%= product.price %>" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-text">Enter the selling price</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="quantity" class="form-label">
+                                Stock Quantity <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" 
+                                   value="<%= product.quantity %>" min="0" required>
+                            <div class="form-text">Number of items in stock</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Product Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" 
+                                  placeholder="Enter a detailed description of the product..."><%= product.description || '' %></textarea>
+                        <div class="form-text">Optional: Detailed product description</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="image" class="form-label">Product Image URL</label>
+                        <input type="text" class="form-control" id="image" name="image" 
+                               value="<%= product.image || '' %>" 
+                               placeholder="https://example.com/image.jpg">
+                        <div class="form-text">Optional: Direct URL to product image</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Created:</strong><br>
+                                <span class="text-muted">
+                                    <%= product.createdAt ? new Date(product.createdAt).toLocaleDateString() : 'N/A' %>
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Last Updated:</strong><br>
+                                <span class="text-muted">
+                                    <%= product.updatedAt ? new Date(product.updatedAt).toLocaleDateString() : 'N/A' %>
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Product ID:</strong><br>
+                                <span class="text-muted"><%= product._id %></span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Current Status:</strong><br>
+                                <% if (parseInt(product.quantity) > 0) { %>
+                                    <span class="badge bg-success">Active</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">Out of Stock</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a href="/admin/products" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>
+                                Cancel
+                            </a>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-admin-primary me-2">
+                                <i class="fas fa-save me-2"></i>
+                                Update Product
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card admin-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-eye me-2"></i>
+                    Live Preview
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="product-preview">
+                    <div class="preview-image mb-3">
+                        <% if (product.image) { %>
+                            <img id="preview-img" src="<%= product.image %>" alt="<%= product.name %>" 
+                                 class="img-fluid rounded" style="width: 100%; height: 200px; object-fit: cover;">
+                        <% } else { %>
+                            <img id="preview-img" src="" alt="Product Preview" 
+                                 class="img-fluid rounded" style="width: 100%; height: 200px; object-fit: cover; display: none;">
+                        <% } %>
+                        <div id="preview-placeholder" class="bg-light rounded d-flex align-items-center justify-content-center" 
+                             style="width: 100%; height: 200px; <%= product.image ? 'display: none;' : '' %>">
+                            <div class="text-center text-muted">
+                                <i class="fas fa-image fa-2x mb-2"></i>
+                                <p class="mb-0">Image Preview</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h6 id="preview-name"><%= product.name %></h6>
+                    <p id="preview-category" class="badge bg-secondary mb-2"><%= product.category || 'General' %></p>
+                    <h5 id="preview-price" class="text-success mb-2">$<%= product.price %></h5>
+                    <p id="preview-quantity" class="mb-2">
+                        <% if (parseInt(product.quantity) > 10) { %>
+                            <span class="badge bg-success"><%= product.quantity %> in stock</span>
+                        <% } else if (parseInt(product.quantity) > 0) { %>
+                            <span class="badge bg-warning"><%= product.quantity %> in stock</span>
+                        <% } else { %>
+                            <span class="badge bg-danger">Out of stock</span>
+                        <% } %>
+                    </p>
+                    <p id="preview-description" class="text-muted small">
+                        <%= product.description || 'No description available.' %>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card admin-card mt-3 border-danger">
+            <div class="card-header bg-danger text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Danger Zone
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">
+                    <small>Once you delete a product, there is no going back. Please be certain.</small>
+                </p>
+                <form method="POST" action="/admin/products/<%= product._id %>/delete" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm btn-delete w-100">
+                        <i class="fas fa-trash me-2"></i>
+                        Delete Product
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const categoryInput = document.getElementById('category');
+    const priceInput = document.getElementById('price');
+    const quantityInput = document.getElementById('quantity');
+    const descriptionInput = document.getElementById('description');
+    const imageInput = document.getElementById('image');
+    
+    const previewName = document.getElementById('preview-name');
+    const previewCategory = document.getElementById('preview-category');
+    const previewPrice = document.getElementById('preview-price');
+    const previewQuantity = document.getElementById('preview-quantity');
+    const previewDescription = document.getElementById('preview-description');
+    const previewImg = document.getElementById('preview-img');
+    const previewPlaceholder = document.getElementById('preview-placeholder');
+    
+    function updatePreview() {
+        previewName.textContent = nameInput.value || 'Product Name';
+        previewCategory.textContent = categoryInput.value || 'General';
+        previewPrice.textContent = '$' + (priceInput.value || '0.00');
+        
+        const qty = parseInt(quantityInput.value) || 0;
+        let badgeClass = 'bg-danger';
+        let badgeText = 'Out of stock';
+        
+        if (qty > 10) {
+            badgeClass = 'bg-success';
+            badgeText = qty + ' in stock';
+        } else if (qty > 0) {
+            badgeClass = 'bg-warning';
+            badgeText = qty + ' in stock';
+        }
+        
+        previewQuantity.innerHTML = `<span class="badge ${badgeClass}">${badgeText}</span>`;
+        previewDescription.textContent = descriptionInput.value || 'No description available.';
+        
+        if (imageInput.value) {
+            previewImg.src = imageInput.value;
+            previewImg.style.display = 'block';
+            previewPlaceholder.style.display = 'none';
+        } else {
+            previewImg.style.display = 'none';
+            previewPlaceholder.style.display = 'flex';
+        }
+    }
+    
+    [nameInput, categoryInput, priceInput, quantityInput, descriptionInput, imageInput].forEach(input => {
+        input.addEventListener('input', updatePreview);
+    });
+    
+    previewImg.addEventListener('error', function() {
+        previewImg.style.display = 'none';
+        previewPlaceholder.style.display = 'flex';
+    });
+});
+</script>

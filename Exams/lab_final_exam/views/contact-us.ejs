@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - eCommerce</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/styling.css" rel="stylesheet">
+    <style>
+        .complaint-card {
+            transition: transform 0.2s ease-in-out;
+            border-left: 4px solid #007bff;
+        }
+        .complaint-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .status-pending { background-color: #ffc107; color: #000; }
+        .status-in-progress { background-color: #17a2b8; color: #fff; }
+        .status-resolved { background-color: #28a745; color: #fff; }
+        .contact-form {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            color: #495057;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .order-input-toggle {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .order-input-toggle.active {
+            border-color: #007bff;
+            background-color: #f8f9ff;
+        }
+        .toggle-option {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            margin: 0.2rem;
+        }
+        .toggle-option:hover {
+            background-color: #e9ecef;
+        }
+        .toggle-option.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .manual-order-input {
+            display: none;
+        }
+        .manual-order-input.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container my-5">
+        <% if (success && success.length > 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+
+        <% if (error && error.length > 0) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="contact-form">
+                    <h2 class="section-title">
+                        <i class="fas fa-headset me-2"></i>
+                        Submit a Complaint
+                    </h2>
+                    
+                    <form action="/contact-us/submit" method="POST" id="complaintForm">
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fas fa-shopping-bag me-2"></i>
+                                Order Selection Method
+                            </label>
+                            <div class="d-flex flex-wrap">
+                                <div class="toggle-option active" id="selectOrderToggle">
+                                    <i class="fas fa-list me-2"></i>
+                                    Select from My Orders
+                                </div>
+                                <div class="toggle-option" id="manualOrderToggle">
+                                    <i class="fas fa-keyboard me-2"></i>
+                                    Enter Order ID Manually
+                                </div>
+                                <div class="toggle-option" id="generalToggle">
+                                    <i class="fas fa-comment me-2"></i>
+                                    General Complaint
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3" id="selectOrderSection">
+                            <label for="orderId" class="form-label">
+                                <i class="fas fa-shopping-bag me-2"></i>
+                                Select Order
+                            </label>
+                            <select class="form-select" id="orderId" name="orderId">
+                                <option value="">Choose an order...</option>
+                                <% if (orders && orders.length > 0) { %>
+                                    <% orders.forEach(order => { %>
+                                        <option value="<%= order._id %>">
+                                            Order #<%= order.orderNumber || order._id.toString().slice(-6) %> 
+                                            - $<%= parseFloat(order.totalAmount).toFixed(2) %> 
+                                            (<%= new Date(order.orderDate).toLocaleDateString() %>)
+                                        </option>
+                                    <% }) %>
+                                <% } else { %>
+                                    <option value="" disabled>No orders found</option>
+                                <% } %>
+                            </select>
+                        </div>
+
+                        <div class="mb-3 manual-order-input" id="manualOrderSection">
+                            <label for="manualOrderId" class="form-label">
+                                <i class="fas fa-hashtag me-2"></i>
+                                Enter Order ID or Order Number
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="manualOrderId" 
+                                name="manualOrderId"
+                                placeholder="Enter your Order ID (e.g., 507f1f77bcf86cd799439011) or Order Number (e.g., ORD-12345)"
+                                maxlength="50"
+                            >
+                            <div class="form-text">
+                                <small>
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    You can find your Order ID or Order Number in your order confirmation email or account dashboard.
+                                </small>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="orderInputMethod" name="orderInputMethod" value="select">
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">
+                                <i class="fas fa-comment-alt me-2"></i>
+                                Your Message *
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="message" 
+                                name="message" 
+                                rows="5" 
+                                placeholder="Please describe your issue or concern in detail..." 
+                                required
+                                minlength="10"
+                                maxlength="1000"
+                            ></textarea>
+                            <div class="form-text">
+                                <small id="charCount">0/1000 characters</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Submit Complaint
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Contact Information
+                        </h3>
+                        
+                        <div class="mb-4">
+                            <h5><i class="fas fa-clock me-2 text-primary"></i>Business Hours</h5>
+                            <p class="text-muted">
+                                Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                Saturday: 10:00 AM - 4:00 PM<br>
+                                Sunday: Closed
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5><i class="fas fa-envelope me-2 text-primary"></i>Email Support</h5>
+                            <p class="text-muted">support@missguided.com</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5><i class="fas fa-phone me-2 text-primary"></i>Phone Support</h5>
+                            <p class="text-muted">+1 (555) 123-4567</p>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>Tip:</strong> For faster resolution, please include your order number and detailed description of the issue.
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-search me-2"></i>
+                            <strong>Can't find your Order ID?</strong><br>
+                            <small>Check your email confirmation, account dashboard, or contact us with your order details.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="section-title">
+                    <i class="fas fa-history me-2"></i>
+                    Your Complaints History
+                </h2>
+
+                <% if (complaints && complaints.length > 0) { %>
+                    <div class="row">
+                        <% complaints.forEach(complaint => { %>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card complaint-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="card-title mb-0">
+                                                <% if (complaint.orderId) { %>
+                                                    Order #<%= complaint.orderId.orderNumber || complaint.orderId._id.toString().slice(-6) %>
+                                                <% } else { %>
+                                                    General Complaint
+                                                <% } %>
+                                            </h6>
+                                            <span class="badge status-<%= complaint.status %> status-badge">
+                                                <%= complaint.status.replace('-', ' ').toUpperCase() %>
+                                            </span>
+                                        </div>
+                                        
+                                        <p class="card-text text-muted small">
+                                            <%= new Date(complaint.createdAt).toLocaleDateString() %> at 
+                                            <%= new Date(complaint.createdAt).toLocaleTimeString() %>
+                                        </p>
+                                        
+                                        <p class="card-text">
+                                            <%= complaint.message.length > 100 ? complaint.message.substring(0, 100) + '...' : complaint.message %>
+                                        </p>
+                                        
+                                        <% if (complaint.adminResponse) { %>
+                                            <div class="alert alert-light p-2 mt-2">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-reply me-1"></i>
+                                                    <strong>Admin Response:</strong><br>
+                                                    <%= complaint.adminResponse %>
+                                                </small>
+                                            </div>
+                                        <% } %>
+                                        
+                                        <a href="/contact-us/complaint/<%= complaint._id %>" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You haven't submitted any complaints yet.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const selectOrderToggle = document.getElementById('selectOrderToggle');
+        const manualOrderToggle = document.getElementById('manualOrderToggle');
+        const generalToggle = document.getElementById('generalToggle');
+        const selectOrderSection = document.getElementById('selectOrderSection');
+        const manualOrderSection = document.getElementById('manualOrderSection');
+        const orderIdSelect = document.getElementById('orderId');
+        const manualOrderIdInput = document.getElementById('manualOrderId');
+        const orderInputMethod = document.getElementById('orderInputMethod');
+
+        function clearActiveToggles() {
+            document.querySelectorAll('.toggle-option').forEach(toggle => {
+                toggle.classList.remove('active');
+            });
+        }
+
+        function resetInputs() {
+            orderIdSelect.value = '';
+            manualOrderIdInput.value = '';
+            orderIdSelect.removeAttribute('required');
+            manualOrderIdInput.removeAttribute('required');
+        }
+
+        selectOrderToggle.addEventListener('click', function() {
+            clearActiveToggles();
+            this.classList.add('active');
+            selectOrderSection.style.display = 'block';
+            manualOrderSection.classList.remove('show');
+            orderInputMethod.value = 'select';
+            resetInputs();
+        });
+
+        manualOrderToggle.addEventListener('click', function() {
+            clearActiveToggles();
+            this.classList.add('active');
+            selectOrderSection.style.display = 'none';
+            manualOrderSection.classList.add('show');
+            orderInputMethod.value = 'manual';
+            resetInputs();
+        });
+
+        generalToggle.addEventListener('click', function() {
+            clearActiveToggles();
+            this.classList.add('active');
+            selectOrderSection.style.display = 'none';
+            manualOrderSection.classList.remove('show');
+            orderInputMethod.value = 'general';
+            resetInputs();
+        });
+
+        
+        document.getElementById('message').addEventListener('input', function() {
+            const charCount = this.value.length;
+            document.getElementById('charCount').textContent = charCount + '/1000 characters';
+            
+            if (charCount > 1000) {
+                this.value = this.value.substring(0, 1000);
+                document.getElementById('charCount').textContent = '1000/1000 characters';
+            }
+        });
+
+    
+        document.getElementById('complaintForm').addEventListener('submit', function(e) {
+            const message = document.getElementById('message').value.trim();
+            const method = orderInputMethod.value;
+
+            if (message.length < 10) {
+                e.preventDefault();
+                alert('Message should be at least 10 characters long.');
+                return;
+            }
+
+       
+            if (method === 'select') {
+                const selectedOrderId = orderIdSelect.value;
+                if (!selectedOrderId) {
+                    e.preventDefault();
+                    alert('Please select an order or choose a different option.');
+                    return;
+                }
+            } else if (method === 'manual') {
+                const manualOrderId = manualOrderIdInput.value.trim();
+                if (!manualOrderId) {
+                    e.preventDefault();
+                    alert('Please enter an Order ID or choose a different option.');
+                    return;
+                }
+                if (manualOrderId.length < 3) {
+                    e.preventDefault();
+                    alert('Please enter a valid Order ID (at least 3 characters).');
+                    return;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
